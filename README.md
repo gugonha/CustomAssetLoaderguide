@@ -123,7 +123,7 @@ These are the types of tracks that are used for creating motions, in this guide 
 
 -`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to just drag in your animationclips into this track.
 
-refanimatiosetup
+[](docs/assets/setupanimatior.png)
 
 -`Character Appearance Timeline` track. You should set this one to your character appearance, by right clicking on this track in the timeline you will see a giant list of options, which may be intimidating, but for now the main ones you need to think about are these:
 
@@ -133,7 +133,7 @@ When you click on any of these you will notice a marker has been added to your t
 
 -`Skill Give Timing` track. You should set this one to your character appearance; This one is pretty similar to the one above, it just has a different set of markers that it uses, to see them scroll down the menu when you right click the track a little, once again you dont need to worry about all of them, the ones below are the ones you should think about mostly, and once again they work pretty similarly to motions just with markers in the timeline itself instead of values inside a json file.
 
-skilltimingref
+[](docs/assets/skillgivetimingmarkers.png)
 
 -`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on a timeline you need to go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it, then go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly.
 
