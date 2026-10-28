@@ -54,7 +54,7 @@ Labels and resourceId pairs are used in game, so you can either look at existing
 
 Fawk you. Use immersive plagiarism because its cooler.
 
-# Unity Editor
+# Custom Appearance Basics
 
 First things first, this guide assumes you have one of Doppel's templates. As such, switch the color space to Gamma. This can be done via navigating to Project Settings -> Player -> Other Settings -> Color Space
 
@@ -74,7 +74,7 @@ I'll briefly cover some of the materials that should be there.
 
 On the prefab, you should find:
 - A `CharacterApperacneResiver` script, which is required for the game engine to use your appearance properly. Within it's `appearance` slot, set a reference to your prefab/gameobject that it exists under.
-- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info` and `Motion List` to bind timelines, said script can also be swapped for a `CharacterAppearance` script if you want to work with ID appearances; If you do, be sure to also remove the abnormality sprites from the `SpineRenderer` object and add a `CharacterSpineSkin` script in their place.
+- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info`, `Motion List` to bind timelines and `Sprenderer_charactermotion` to the sprite renderer on your `SpRenderer` object. Said `AbnormalityAppearnce` script can also be swapped for a `CharacterAppearance` script if you want to work with ID appearances; If you do, be sure to also remove the abnormality sprites from the `SpineRenderer` object and add a `CharacterSpineSkin` script in their place.
 - A `PlayableDirector`, leave it as is (and replace the playable later once you actually begin work)
 - An `Animator`, which you will use when you create a new `Animator Controller` component.
 - The `CharacterAppearanceBlood` script, which allows you to edit various properties of blood on the unit.
@@ -83,33 +83,33 @@ On the prefab, you should find:
 - And last but not least, the `CharacterAppearanceUpdateBuffState` script, which allows you to activate effects based on the stack of a buff. Populate the `Active Effect` list with a reference to a VFX prefab in order to activate it.
 
 Within `ScaleAndPositionPivot`, and `PivotForAnim`, you will find:
-- `SpinePivot`, which holds a `SpineRenderer`
+- `SpinePivot`, which holds a `SpineRenderer`.
 - `SpRenderer`, which holds all the blood renders and is the unit's Sprite Renderer.
-- `DefaultEffectPivot`, which is where VFX should be parented to
-- `CharacterCenterPoint`
-- `CharacterHeightPoint`
+- `DefaultEffectPivot`, which is where all VFX should be parented to.
+- `CharacterCenterPoint`, which is pretty self explanatory.
+- `CharacterHeightPoint`, which defines the the position of the coin and skill UI on your appearance.
 
 Depending on the copy of your template, you may also find other anchor objects. Those are not required, but you may look at them if you wish.
 
 Navigate back to the `assets` folder, then go to `art`, `qui'lon`, `Animators`, `Phase1`.
 
-Within this folder, you will find the `Animation Controller`. Rename it to match your project. It's state is fine as is for now.
+Within this folder, you will find the `Animation Controller`. Rename it to match your project and make sure its set on your animator inside your appearance object. It's state is fine as is for now.
 
-Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit.
-
-Before doing anything, open up the animation window by pressing `Ctrl + 6`, then press on the arrow on the top left corner of the window and click `Create New Clip`, this is where all of your sprite animations will be made.
+Before doing anything, open up the animation window by pressing `Ctrl + 6`, click on your appearance object in the hierarchy window, then press on the arrow on the top left corner of the window and click `Create New Clip`, this is where all of your sprite animations will be made. *if you are prompted to create a new animator, do NOT do it, the only animator for the character sprites should be on the main appearance object*
 
 ![](docs/assets/animationclipmaking.png)
 
-Next, double click any of the `TimelineAssets`. You will see a screen like this:
+When doing your first animation clip, make sure that when you add the `sprite` property of the sprite renderer that is inside of `SpRenderer` to ensure correct scaling. To actually use your sprites in an animationclip you select them in the assets window, change their type to `Sprite (2d and UI)`, change `Sprite Mode` to Single and now you should be able to simply drag them into the animationclip. *its also recommended to set the pivot point of your sprites to where the ground would be and between the legs for correct positioning on certain in game effects*
+
+Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, double click any of the `TimelineAssets`. You will see a screen like this:
 
 ![](docs/assets/timelinewindow.png)
 
-First things first, locate the SpineRenderer on the asset and remove it if you're planning to use Sprite based animation instead of Spine. (Which is what this guide will be going over.)
+First things first, locate the SpineRenderer on the asset and remove it if you're planning to use Sprite based animation instead of Spine.
 
 Once you've killed that pesky SpineRenderer, replace it with an Animation Track by right clicking and selecting Animation Track. Once you've done this, click the prefab that you created earlier in the hierarchy, then, take its `SpRenderer` and drag it into the empty slot on the Animation Track. When it prompts to create an animator, press yes.
 
-Great! We have a basic setup for this. Next, go ahead and drag your newly created Animation Clip onto the Animation Track. Them, double click the Animation Clip to bring up the Animation Preview.
+Great! We have a basic setup for this. Next, go ahead and drag your newly created Animation Clip onto the Animation Track. Then, double click the Animation Clip to bring up the Animation Preview.
 
 Once you've done that, click the prefab in the hierarchy again, and drag in any sprite. It should create a new `[SpRenderer]: Sprite` asset in the animation, and from there, you can animate as usual, however, you will have no preview.
 
