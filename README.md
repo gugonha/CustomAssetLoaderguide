@@ -52,7 +52,7 @@ Labels and resourceId pairs are used in game, so you can either look at existing
 
 **How do I use shader remapping?**
 
-Fawk you. Use immersive plagiarism because its cooler.
+Use Immersive Plagiarism by the naenae.
 
 # Custom Appearance Basics
 
@@ -72,7 +72,7 @@ Great. Now we have the prefab appearance. Here resides all of our VFX, alongside
 
 I'll briefly cover some of the materials that should be there.
 
-On the prefab, you should find:
+On the main appearance object, you should find:
 - A `CharacterApperacneResiver` script, which is required for the game engine to use your appearance properly. Within it's `appearance` slot, set a reference to your prefab/gameobject that it exists under.
 - Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info`, `Motion List` to bind timelines, and `Sprenderer_charactermotion` to the sprite renderer on your `SpRenderer` object. Said `AbnormalityAppearnce` script can also be swapped for a `CharacterAppearance` script if you want to work with ID appearances; If you do, be sure to also remove the abnormality sprites from the `SpineRenderer` object and add a `CharacterSpineSkin` script in their place.
 - A `PlayableDirector`, leave it as is (and replace the playable later once you actually begin work)
@@ -84,7 +84,7 @@ On the prefab, you should find:
 
 Within `ScaleAndPositionPivot`, and `PivotForAnim`, you will find:
 - `SpinePivot`, which holds a `SpineRenderer`.
-- `SpRenderer`, which holds all the blood renders and is the unit's Sprite Renderer.
+- `SpRenderer`, which holds all the blood renders and is the unit's Sprite Renderer, its very important that you make sure that this object has a `Sprite Mask` component in it, if it doesnt have it the game shits itself badly.
 - `DefaultEffectPivot`, which is where all VFX should be parented to.
 - `CharacterCenterPoint`, which is pretty self explanatory.
 - `CharacterHeightPoint`, which defines the the position of the coin and skill UI on your appearance.
@@ -105,8 +105,6 @@ Before doing anything, open up the animation window by pressing `Ctrl + 6`, clic
 
 When doing your first animation clip, make sure that when you add the `sprite` property of the sprite renderer that is inside of `SpRenderer` to ensure correct scaling. To actually use your sprites in an animationclip you select them in the assets window, change their type to `Sprite (2d and UI)`, change `Sprite Mode` to Single and now you should be able to simply drag them into the animationclip. *its also recommended to set the pivot point of your sprites to where the ground would be and between the legs for correct positioning on certain in game effects*
 
-Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, you can use them for learning purposes, but for the guide we will be making a new timeline from 0.
-
 # Timeline making
 
 Timelines are what will contain the actual skill animations, including movement, camera and damage markers.
@@ -123,21 +121,21 @@ Now, youll want to right click on the timeline, you will see something similar t
 
 These are the types of tracks that are used for creating motions, in this guide ill mention only the most important ones. Those are:
 
--`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to drag just drag in your animationclips into this track.
+-`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to just drag in your animationclips into this track.
 
 refanimatiosetup
 
 -`Character Appearance Timeline` track. You should set this one to your character appearance, by right clicking on this track in the timeline you will see a giant list of options, which may be intimidating, but for now the main ones you need to think about are these:
 
-
+charapref
 
 When you click on any of these you will notice a marker has been added to your timeline, this marker is what tells the game the time that it has to do what the marker says, every marker has its own settings when you click on them, but most are similar to custom motions so i believe you can figure it out :steamhappy:
 
 -`Skill Give Timing` track. You should set this one to your character appearance; This one is pretty similar to the one above, it just has a different set of markers that it uses, to see them scroll down the menu when you right click the track a little, once again you dont need to worry about all of them, the ones below are the ones you should think about mostly, and once again they work pretty similarly to motions just with markers in the timeline itself instead of values inside a json file.
 
+skilltimingref
 
-
--`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on the a timeline you need to go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it, then go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly.
+-`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on a timeline you need to go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it, then go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly.
 
 -`On Battle Cam Zoom` and `On Battle Cam Rotate` tracks. Same setup. These are the tracks that control the zooms and rotates (duhh), to use these you simply right click on them in the timeline and you should have a option to add either a battle cam zoom clip or a battle cam rotate clip. these work a bit differently from the skill give timing or the appearance track, they create clips instead of markers, by clicking in the clips you should see the camera options, once again the setup for them is similar to motions, the main change is that the duration for the zoom or rotate is set by the actual lenght of the clip in the timeline, so it makes timing the camera movement way easier.
 
