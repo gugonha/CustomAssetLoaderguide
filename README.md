@@ -74,7 +74,7 @@ I'll briefly cover some of the materials that should be there.
 
 On the prefab, you should find:
 - A `CharacterApperacneResiver` script, which is required for the game engine to use your appearance properly. Within it's `appearance` slot, set a reference to your prefab/gameobject that it exists under.
-- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info` and `Motion List` to bind timelines.
+- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info` and `Motion List` to bind timelines, said script can also be swapped for a `CharacterAppearance` script if you want to work with ID appearances; If you do, be sure to also remove the abnormality sprites from the `SpineRenderer` object and add a `CharacterSpineSkin` script in their place.
 - A `PlayableDirector`, leave it as is (and replace the playable later once you actually begin work)
 - An `Animator`, which you will use when you create a new `Animator Controller` component.
 - The `CharacterAppearanceBlood` script, which allows you to edit various properties of blood on the unit.
@@ -93,11 +93,11 @@ Depending on the copy of your template, you may also find other anchor objects. 
 
 Navigate back to the `assets` folder, then go to `art`, `qui'lon`, `Animators`, `Phase1`.
 
-Within this folder, you will find the `Animation Controller`. Rename it to match your project. It's state is fine as is.
+Within this folder, you will find the `Animation Controller`. Rename it to match your project. It's state is fine as is for now.
 
 Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit.
 
-Before doing anything, right click anywhere in the Project window, go to `Create` -> `Animation` -> `AnimationClip`.
+Before doing anything, open up the animation window by pressing `Ctrl + 6`, then press on the arrow on the top left corner of the window and click `Create New Clip`.
 
 Next, double click any of the `TimelineAssets`. You will see a screen like this:
 
