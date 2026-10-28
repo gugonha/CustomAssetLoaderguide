@@ -161,11 +161,11 @@ First you should download the .cs scripts placed on the exportfiles folder on th
 
 Then when you are ready you should go to the top of the screen and click to build your bundle.
 
-unitybuildex
+![](docs/assets/buildexample.png)
 
 the bundle file will be at this directory:
 
-unitylocation
+![](docs/assets/builddirectory.png)
 
 You may have noticed your file doesnt have the .bundle extension, dont worry, this is normal and you should just keep it that way.
 After you have built your bundle just load it in with assetloader as said in the beggining and use it like you would use any vanilla appearance :steamhappy:
