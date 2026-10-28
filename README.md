@@ -147,11 +147,11 @@ Since you already have your timeline setup you should start building your motion
 
 After you have built your timeline now its time to add it to the appearance, for this you should first check if the bindings for the track on the Playable Director in appearance are correct. After that you should go to your main appearance object and find `Motion List` inside of the `AbnormalityAppearnce`/`CharacterAppearance`.
 
-imagerefformotonlist
+![](docs/assets/addtomotionlist.png)
 
 When you click on the plus at the bottom right corner you will see that a element has been added:
 
-refelement
+![](docs/assets/refelement.png)
 
 The important things here are `motiondetail`, which is where you select the motion like s1/s2/parry etc. And `Timeline Assets`, which is the place that youll add the timelines you just made :steamhappy:; if you have a multi coin skill you can just add all the timelines inside the `Timeline Assets` tab under the element tagget with the motiondetail of your skill. if you want to have variation in your animations, such as different parrying anims, you can just follow the same process.
 *if you are messing with spine animations you should also mark the element for your motions as a spine anim*
