@@ -95,25 +95,29 @@ Navigate back to the `assets` folder, then go to `art`, `qui'lon`, `Animators`, 
 
 Within this folder, you will find the `Animation Controller`. Rename it to match your project and make sure its set on your animator inside your appearance object. It's state is fine as is for now.
 
+# Animationclips
+
+Animationclips are used to make the sprite animations for your appearance.
+
 Before doing anything, open up the animation window by pressing `Ctrl + 6`, click on your appearance object in the hierarchy window, then press on the arrow on the top left corner of the window and click `Create New Clip`, this is where all of your sprite animations will be made. *if you are prompted to create a new animator, do NOT do it, the only animator for the character sprites should be on the main appearance object*
 
 ![](docs/assets/animationclipmaking.png)
 
 When doing your first animation clip, make sure that when you add the `sprite` property of the sprite renderer that is inside of `SpRenderer` to ensure correct scaling. To actually use your sprites in an animationclip you select them in the assets window, change their type to `Sprite (2d and UI)`, change `Sprite Mode` to Single and now you should be able to simply drag them into the animationclip. *its also recommended to set the pivot point of your sprites to where the ground would be and between the legs for correct positioning on certain in game effects*
 
-Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, you can use them for learning purposes, but for the guide we will be making a new timeline from 0:
+Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, you can use them for learning purposes, but for the guide we will be making a new timeline from 0.
 
-First things first, right click on the assets tab and right click to create a new timeline asset.
+# Timeline making
+
+Timelines are what will contain the actual skill animations, including movement, camera and damage markers.
+
+First things first, right click on the assets tab and click to create a new timeline asset.
 
 ![](docs/assets/createtimeline.png)
 
 Then, drag the timeline asset you are planning on editing into the `playable director` of your appearance, this needs to be done to any timeline you are editing so that you can see the movement previews and properly parent the tracks.
 
-Once you've killed that pesky SpineRenderer, replace it with an Animation Track by right clicking and selecting Animation Track. Once you've done this, click the prefab that you created earlier in the hierarchy, then, take its `SpRenderer` and drag it into the empty slot on the Animation Track. When it prompts to create an animator, press yes.
-
-Great! We have a basic setup for this. Next, go ahead and drag your newly created Animation Clip onto the Animation Track. Then, double click the Animation Clip to bring up the Animation Preview.
-
-Once you've done that, click the prefab in the hierarchy again, and drag in any sprite. It should create a new `[SpRenderer]: Sprite` asset in the animation, and from there, you can animate as usual, however, you will have no preview.
+Now, youll want to right click on the timeline, you will see something similar to this:
 
 **NOTE**: When making a new TimelineAsset, it needs to be added to the Bindings section on the appearance prefab's `PlayableDirector`. Every new motion also needs to exist on the prefab's `CharacterAppearance` script within it's `Motions List`. If the motion has a timeline, add it to the `Timeline Assets`. If you are using Spine instead, go to `Motion Objects` and enable the Spine Anim option.
 
