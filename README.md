@@ -103,9 +103,11 @@ When doing your first animation clip, make sure that when you add the `sprite` p
 
 Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, you can use them for learning purposes, but for the guide we will be making a new timeline from 0:
 
-First things first, drag the timeline asset you are planning on editing into the `playable director` of your appearance, this needs to be done to any timeline you are editing so that you can see the movement previews and properly parent the tracks.
+First things first, right click on the assets tab and right click to create a new timeline asset.
 
-Then, if you arent using Spine, locate the SpineRenderer on the asset and remove it
+![](docs/assets/createtimeline.png)
+
+Then, drag the timeline asset you are planning on editing into the `playable director` of your appearance, this needs to be done to any timeline you are editing so that you can see the movement previews and properly parent the tracks.
 
 Once you've killed that pesky SpineRenderer, replace it with an Animation Track by right clicking and selecting Animation Track. Once you've done this, click the prefab that you created earlier in the hierarchy, then, take its `SpRenderer` and drag it into the empty slot on the Animation Track. When it prompts to create an animator, press yes.
 
