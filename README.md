@@ -156,3 +156,16 @@ When you click on the plus at the bottom right corner you will see that a elemen
 The important things here are `motiondetail`, which is where you select the motion like s1/s2/parry etc. And `Timeline Assets`, which is the place that youll add the timelines you just made :steamhappy:; if you have a multi coin skill you can just add all the timelines inside the `Timeline Assets` tab under the element tagget with the motiondetail of your skill. if you want to have variation in your animations, such as different parrying anims, you can just follow the same process.
 *if you are messing with spine animations you should also mark the element for your motions as a spine anim*
 
+# Building your bundle
+First you should download the .cs scripts placed on the exportfiles folder on this github and drag them into the Editor folder in your project, make sure that only the newly downloaded BuildAssetBundles.cs file remains in the project.
+
+Then when you are ready you should go to the top of the screen and click to build your bundle.
+
+unitybuildex
+
+the bundle file will be at this directory:
+
+unitylocation
+
+You may have noticed your file doesnt have the .bundle extension, dont worry, this is normal and you should just keep it that way.
+After you have built your bundle just load it in with assetloader as said in the beggining and use it like you would use any vanilla appearance :steamhappy:
