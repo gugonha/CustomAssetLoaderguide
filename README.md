@@ -101,11 +101,11 @@ Before doing anything, open up the animation window by pressing `Ctrl + 6`, clic
 
 When doing your first animation clip, make sure that when you add the `sprite` property of the sprite renderer that is inside of `SpRenderer` to ensure correct scaling. To actually use your sprites in an animationclip you select them in the assets window, change their type to `Sprite (2d and UI)`, change `Sprite Mode` to Single and now you should be able to simply drag them into the animationclip. *its also recommended to set the pivot point of your sprites to where the ground would be and between the legs for correct positioning on certain in game effects*
 
-Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, double click any of the `TimelineAssets`. You will see a screen like this:
+Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit, you can use them for learning purposes, but for the guide we will be making a new timeline from 0:
 
-![](docs/assets/timelinewindow.png)
+First things first, drag the timeline asset you are planning on editing into the `playable director` of your appearance, this needs to be done to any timeline you are editing so that you can see the movement previews and properly parent the tracks.
 
-First things first, locate the SpineRenderer on the asset and remove it if you're planning to use Sprite based animation instead of Spine.
+Then, if you arent using Spine, locate the SpineRenderer on the asset and remove it
 
 Once you've killed that pesky SpineRenderer, replace it with an Animation Track by right clicking and selecting Animation Track. Once you've done this, click the prefab that you created earlier in the hierarchy, then, take its `SpRenderer` and drag it into the empty slot on the Animation Track. When it prompts to create an animator, press yes.
 
