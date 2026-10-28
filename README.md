@@ -117,17 +117,17 @@ Then, drag the timeline asset you are planning on editing into the `playable dir
 
 Now, youll want to right click on the timeline, you will see something similar to this:
 
-[](docs/assets/timelinewindow.png)
+![](docs/assets/timelinewindow.png)
 
 These are the types of tracks that are used for creating motions, in this guide ill mention only the most important ones. Those are:
 
 -`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to just drag in your animationclips into this track.
 
-[](docs/assets/setupanimatior.png)
+![](docs/assets/setupanimatior.png)
 
 -`Character Appearance Timeline` track. You should set this one to your character appearance, by right clicking on this track in the timeline you will see a giant list of options, which may be intimidating, but for now the main ones you need to think about are these:
 
-[](docs/assets/timelinetracks.png)
+![](docs/assets/timelinetracks.png)
 
 When you click on any of these you will notice a marker has been added to your timeline, this marker is what tells the game the time that it has to do what the marker says, every marker has its own settings when you click on them, but most are similar to custom motions so i believe you can figure it out :steamhappy:
 
