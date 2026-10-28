@@ -97,7 +97,9 @@ Within this folder, you will find the `Animation Controller`. Rename it to match
 
 Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit.
 
-Before doing anything, open up the animation window by pressing `Ctrl + 6`, then press on the arrow on the top left corner of the window and click `Create New Clip`.
+Before doing anything, open up the animation window by pressing `Ctrl + 6`, then press on the arrow on the top left corner of the window and click `Create New Clip`, this is where all of your sprite animations will be made.
+
+![](docs/assets/animationclipmaking.png)
 
 Next, double click any of the `TimelineAssets`. You will see a screen like this:
 
