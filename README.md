@@ -117,9 +117,9 @@ Then, drag the timeline asset you are planning on editing into the `playable dir
 
 Now, youll want to right click on the timeline, you will see something similar to this:
 
-![](docs/assets/timelinewindow.png)
+![](docs/assets/timelineaddtracks.png)
 
-These are the types of tracks that are used for creating motions, in this guide ill mention only the most important ones. Those are:
+These are the types of tracks that are used for creating motions (aka your actual skills and etc), in this guide ill mention only the most important ones. Those are:
 
 -`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to just drag in your animationclips into this track.
 
@@ -135,17 +135,24 @@ When you click on any of these you will notice a marker has been added to your t
 
 ![](docs/assets/skillgivetimingmarkers.png)
 
--`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on a timeline you need to go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it, then go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly.
+-`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on a timeline you need to first place its object under the `DefaultEffectPivot` transform, then go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it and set the `This Particle` field to the particlesystem of your vfx, after youve done that go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly. *vfx position and scale follow the scale that it has when you look at it inside the `defaulteffectpivot`*
 
 -`On Battle Cam Zoom` and `On Battle Cam Rotate` tracks. Same setup. These are the tracks that control the zooms and rotates (duhh), to use these you simply right click on them in the timeline and you should have a option to add either a battle cam zoom clip or a battle cam rotate clip. these work a bit differently from the skill give timing or the appearance track, they create clips instead of markers, by clicking in the clips you should see the camera options, once again the setup for them is similar to motions, the main change is that the duration for the zoom or rotate is set by the actual lenght of the clip in the timeline, so it makes timing the camera movement way easier.
 
+# Making Motions
 
+Now that you have a basic idea of the tracks and their purposes you need to start making your motions.
 
-**NOTE**: When making a new TimelineAsset, it needs to be added to the Bindings section on the appearance prefab's `PlayableDirector`. Every new motion also needs to exist on the prefab's `CharacterAppearance` script within it's `Motions List`. If the motion has a timeline, add it to the `Timeline Assets`. If you are using Spine instead, go to `Motion Objects` and enable the Spine Anim option.
+Since you already have your timeline setup you should start building your motion however you want, the markers have pretty self explanatory names and their function is the same as the things youd use in motions json that have the same name. Just dont forget to add a `Character Appearance Marker_Hit Cheaker` at the end of the motion. *remember that skill motions with multiple coins should have each coin be its own timeline*
 
-# Hit checkers, visual effects
+After you have built your timeline now its time to add it to the appearance, for this you should first check if the bindings for the track on the Playable Director in appearance are correct. After that you should go to your main appearance object and find `Motion List` inside of the `AbnormalityAppearnce`/`CharacterAppearance`.
 
-In order to add VFX, you must first parent the VFX to the prefab's DefaultEffectPivot transform. Once that's done, the VFX parent object must have the script Character Attack Effect. On said script, you must link the `This Particle` field to the particlesystem. Once that's done, navigate back to the TimelineAsset, then, right click the `Effect Activate Timeline Track`'s track -> `Add from Character Attack Effect` -> Your VFX. Scale and position as needed.
+imagerefformotonlist
 
-For hit checkers, you must simply right click the `Skill Give Timing Track`, and select from the list of adds. Alternatively, copy paste an existing give damage timing from the preset TimelineAssets.
+When you click on the plus at the bottom right corner you will see that a element has been added:
+
+refelement
+
+The important things here are `motiondetail`, which is where you select the motion like s1/s2/parry etc. And `Timeline Assets`, which is the place that youll add the timelines you just made :steamhappy:; if you have a multi coin skill you can just add all the timelines inside the `Timeline Assets` tab under the element tagget with the motiondetail of your skill. if you want to have variation in your animations, such as different parrying anims, you can just follow the same process.
+*if you are messing with spine animations you should also mark the element for your motions as a spine anim*
 
