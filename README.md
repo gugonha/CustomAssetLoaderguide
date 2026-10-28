@@ -119,6 +119,30 @@ Then, drag the timeline asset you are planning on editing into the `playable dir
 
 Now, youll want to right click on the timeline, you will see something similar to this:
 
+[](docs/assets/timelinewindow.png)
+
+These are the types of tracks that are used for creating motions, in this guide ill mention only the most important ones. Those are:
+
+-`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to drag just drag in your animationclips into this track.
+
+refanimatiosetup
+
+-`Character Appearance Timeline` track. You should set this one to your character appearance, by right clicking on this track in the timeline you will see a giant list of options, which may be intimidating, but for now the main ones you need to think about are these:
+
+
+
+When you click on any of these you will notice a marker has been added to your timeline, this marker is what tells the game the time that it has to do what the marker says, every marker has its own settings when you click on them, but most are similar to custom motions so i believe you can figure it out :steamhappy:
+
+-`Skill Give Timing` track. You should set this one to your character appearance; This one is pretty similar to the one above, it just has a different set of markers that it uses, to see them scroll down the menu when you right click the track a little, once again you dont need to worry about all of them, the ones below are the ones you should think about mostly, and once again they work pretty similarly to motions just with markers in the timeline itself instead of values inside a json file.
+
+
+
+-`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on the a timeline you need to go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it, then go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly.
+
+-`On Battle Cam Zoom` and `On Battle Cam Rotate` tracks. Same setup. These are the tracks that control the zooms and rotates (duhh), to use these you simply right click on them in the timeline and you should have a option to add either a battle cam zoom clip or a battle cam rotate clip. these work a bit differently from the skill give timing or the appearance track, they create clips instead of markers, by clicking in the clips you should see the camera options, once again the setup for them is similar to motions, the main change is that the duration for the zoom or rotate is set by the actual lenght of the clip in the timeline, so it makes timing the camera movement way easier.
+
+
+
 **NOTE**: When making a new TimelineAsset, it needs to be added to the Bindings section on the appearance prefab's `PlayableDirector`. Every new motion also needs to exist on the prefab's `CharacterAppearance` script within it's `Motions List`. If the motion has a timeline, add it to the `Timeline Assets`. If you are using Spine instead, go to `Motion Objects` and enable the Spine Anim option.
 
 # Hit checkers, visual effects
