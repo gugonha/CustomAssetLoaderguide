@@ -156,6 +156,10 @@ When you click on the plus at the bottom right corner you will see that a elemen
 The important things here are `motiondetail`, which is where you select the motion like s1/s2/parry etc. And `Timeline Assets`, which is the place that youll add the timelines you just made :steamhappy:; if you have a multi coin skill you can just add all the timelines inside the `Timeline Assets` tab under the element tagget with the motiondetail of your skill. if you want to have variation in your animations, such as different parrying anims, you can just follow the same process.
 *if you are messing with spine animations you should also mark the element for your motions as a spine anim*
 
+In certain cases, for motions like guard, move or damaged you dont need to add a timeline to their element, you can just open your animation controller and add a state on it with the name of your motion, and make it reference your animationclip in its motion slot. Like this:
+
+![](docs/assets/animationcontroller.png)
+
 # Building your bundle
 First you should download the .cs scripts placed on the exportfiles folder on this github and drag them into the Editor folder in your project, make sure that only the newly downloaded BuildAssetBundles.cs file remains in the project.
 
