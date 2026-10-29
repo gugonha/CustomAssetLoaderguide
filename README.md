@@ -1,4 +1,4 @@
-# CustomAssetLoader
+<img width="364" height="470" alt="image" src="https://github.com/user-attachments/assets/2743b658-5a6e-4346-ac2f-c1a33b0374d4" /># CustomAssetLoader
 
 Allows the loading of your own custom bundles completely independent from anything in game (unlike Motions)
 
@@ -172,6 +172,36 @@ After youve done this you should notice that a "bean" named `Preview Target (dum
 First you should go to your appearance object in your hierarchy and remove any timelines from its playable director, after you make sure that your appearance isnt currently playing any timeline there, set your appearance position to x:0 y:0 z:0.
 
 Then you should go to `Preview Target (dummy)` on the hierarchy and change its position to x:10 y:1 z:0. After this is done you can now put your timeline back into the appearances playable director and everything should be working fine!!!! If it isnt you can also go back to the build menu at the top and select `Bind selected timeline bindings` and things should work. *if when you put the timeline back into your appearance your appearance object changes its position from 0 0 0 to something else, repeat the proccess and set it back :steamhappy:*
+
+# Spine animations
+
+When using assetloader you are also able to use animations made with spine instead of only sprites, PM only uses spine on their idle animations but you are still able to use them on all animations if you wish.
+
+*This section will contain the process i used on my spine animation for idle. the version of spine i use is 3.8.75. This also considers you already have your animation done on spine, as this is not a guide on how to make animations*
+
+Ok if you have considered these things, you can now start. Firstly you should go to your spine project and press `cntrl` + `E` to open the export menu, on said menu you should select the `binary` export option and make sure that the extension for the export is `.skel`, also make sure that under pack settings your atlas extension is `.atlas`, as seen on the following screenshots:
+
+export1
+export2
+
+After you have exported your files you should have something that looks like this:
+
+export 3
+
+Now, if you are using a spine version thats not 4.0.0 (*like me*), youll need to change the version of your export files so that the game accepts them. You can do this by using the [Spine Skeleton Data Converter](https://github.com/wang606/SpineSkeletonDataConverter) tool, when converting the version of the files, make sure that you are converting from your **exact** spine version into **exactly** spine 4.0.0, or else it wont work correctly.
+
+Ok, after thats done you need to change your export file extensions into something that unity accepts so you can actually add it to your project. To do that you should rename your `.skel` file extension to `.skel.bytes`, and your `.atlas` extension to `.atlas.txt`.
+
+Now you can actually add your spine export to unity!! To do that simply drag it into your assets tab in your project, if any errors show up, that means you either did one of the steps wrong or your spine export is evil and fucked up. It should look like this in your assets tab: 
+
+spineinunity
+*ps. dont forget to first click in the `skeletondataasset` thats now in your assets and click `Create animation Reference assets`*
+
+Now to actually use your spine on your appearance, to do this go to the `[SpineRenderer]` object inside of the `[SpinePivot` of your appearance, then, inside the `SkeletonAnimation` component on that object, you simply change the skeletondataasset to yours then click reload. *if you want to follow pm setup, dont forget to also change the sorting layer in the same component to `BattleUnit`*
+
+Then to use spine animations in timelines you simply swap out the `animation track` that was rendering sprites to a `SpineAnimationState` track (*AKA skeleton animation track*) thats binded to your `[SpineRenderer]` object. After this is done you can simply drag your animation reference objects that you created into the track and they will be added to the timeline.
+
+**IMPORTANT!!!!!**: dont forget to make sure that any motions that use spine animations are marked as such in the `motion list` of your appearance. *i am also not very good with troubleshooting any spine issues, and currently im the only one that has used it besides doppel, so if something doesnt work even following these steps then youre kinda fried sorry*
 
 # Building your bundle
 First you should download the .cs scripts placed on the exportfiles folder on this github and drag them into the Editor folder in your project, make sure that only the newly downloaded BuildAssetBundles.cs file remains in the project.
