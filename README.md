@@ -1,4 +1,4 @@
-<img width="364" height="470" alt="image" src="https://github.com/user-attachments/assets/2743b658-5a6e-4346-ac2f-c1a33b0374d4" /># CustomAssetLoader
+# CustomAssetLoader
 
 Allows the loading of your own custom bundles completely independent from anything in game (unlike Motions)
 
@@ -181,12 +181,12 @@ When using assetloader you are also able to use animations made with spine inste
 
 Ok if you have considered these things, you can now start. Firstly you should go to your spine project and press `cntrl` + `E` to open the export menu, on said menu you should select the `binary` export option and make sure that the extension for the export is `.skel`, also make sure that under pack settings your atlas extension is `.atlas`, as seen on the following screenshots:
 
-export1
-export2
+![](docs/assets/export1.png)
+![](docs/assets/export2.png)
 
 After you have exported your files you should have something that looks like this:
 
-export 3
+![](docs/assets/export3.png)
 
 Now, if you are using a spine version thats not 4.0.0 (*like me*), youll need to change the version of your export files so that the game accepts them. You can do this by using the [Spine Skeleton Data Converter](https://github.com/wang606/SpineSkeletonDataConverter) tool, when converting the version of the files, make sure that you are converting from your **exact** spine version into **exactly** spine 4.0.0, or else it wont work correctly.
 
@@ -194,7 +194,8 @@ Ok, after thats done you need to change your export file extensions into somethi
 
 Now you can actually add your spine export to unity!! To do that simply drag it into your assets tab in your project, if any errors show up, that means you either did one of the steps wrong or your spine export is evil and fucked up. It should look like this in your assets tab: 
 
-spineinunity
+![](docs/assets/spineinunity.png)
+
 *ps. dont forget to first click in the `skeletondataasset` thats now in your assets and click `Create animation Reference assets`*
 
 Now to actually use your spine on your appearance, to do this go to the `[SpineRenderer]` object inside of the `[SpinePivot` of your appearance, then, inside the `SkeletonAnimation` component on that object, you simply change the skeletondataasset to yours then click reload. *if you want to follow pm setup, dont forget to also change the sorting layer in the same component to `BattleUnit`*
