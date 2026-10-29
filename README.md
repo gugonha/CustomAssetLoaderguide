@@ -165,13 +165,13 @@ When using Doppels project you can also set up a preview scene in unity, letting
 
 To set this up you should go to the build tab at the top of your screen and click on `preview` > `Setup preview sandbox in scene`, like so:
 
-refpreview
+![](docs/assets/setuppreview.png)
 
-after youve done this you should notice that a "bean" named `Preview Target (dummy)` has appeared on your hierarchy, that is the dummy that represents the target/enemy for things like moving to target and knockbacks on hit. after youve done this your preview is pretty much setup already, but theres a few steps i personally think are pretty much obligatory.
+After youve done this you should notice that a "bean" named `Preview Target (dummy)` has appeared on your hierarchy, that is the dummy that represents the target/enemy for things like moving to target and knockbacks on hit. after youve done this your preview is pretty much setup already, but theres a few steps i personally think are pretty much obligatory.
 
 First you should go to your appearance object in your hierarchy and remove any timelines from its playable director, after you make sure that your appearance isnt currently playing any timeline there, set your appearance position to x:0 y:0 z:0.
 
-Then you should go to `Preview Target (dummy)` on the hierarchy and change its position to x:10 y:1 z:0. After this is done you can now put your timeline back into the appearances playable director and everything should be working fine!!!! If it isnt you can also go back to the build menu at the top and select `Bind selected timeline bindings` and things should work. *if when you put the timeline back into your appearance your appearance object changes its position from 0 0 0 to something else, repeat the proccess:steamhappy:*
+Then you should go to `Preview Target (dummy)` on the hierarchy and change its position to x:10 y:1 z:0. After this is done you can now put your timeline back into the appearances playable director and everything should be working fine!!!! If it isnt you can also go back to the build menu at the top and select `Bind selected timeline bindings` and things should work. *if when you put the timeline back into your appearance your appearance object changes its position from 0 0 0 to something else, repeat the proccess and set it back :steamhappy:*
 
 # Building your bundle
 First you should download the .cs scripts placed on the exportfiles folder on this github and drag them into the Editor folder in your project, make sure that only the newly downloaded BuildAssetBundles.cs file remains in the project.
