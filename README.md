@@ -186,3 +186,7 @@ the bundle file will be at this directory:
 
 You may have noticed your file doesnt have the .bundle extension, dont worry, this is normal and you should just keep it that way.
 After you have built your bundle just load it in with assetloader as said in the beggining and use it like you would use any vanilla appearance :steamhappy:
+
+**WARNING!!!!! VERY IMPORTANT!!!!!**: Make sure that whenever you change something on your appearance object in the scene you go to the main object and click on `overrides` and click `apply` to override the prefab thats gonna be built with your new changes!!!!!
+
+![](docs/assets/override.png)
