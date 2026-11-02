@@ -52,9 +52,9 @@ Labels and resourceId pairs are used in game, so you can either look at existing
 
 **How do I use shader remapping?**
 
-Fawk you. Use immersive plagiarism because its cooler.
+Use Immersive Plagiarism by the naenae.
 
-# Unity Editor
+# Custom Appearance Basics
 
 First things first, this guide assumes you have one of Doppel's templates. As such, switch the color space to Gamma. This can be done via navigating to Project Settings -> Player -> Other Settings -> Color Space
 
@@ -72,9 +72,9 @@ Great. Now we have the prefab appearance. Here resides all of our VFX, alongside
 
 I'll briefly cover some of the materials that should be there.
 
-On the prefab, you should find:
+On the main appearance object, you should find:
 - A `CharacterApperacneResiver` script, which is required for the game engine to use your appearance properly. Within it's `appearance` slot, set a reference to your prefab/gameobject that it exists under.
-- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info` and `Motion List` to bind timelines.
+- Depending on the copy of the template, you will find an `AbnormalityAppearnce` script. Every field in there is self explanatory, so I won't bother. Just make sure to fill out every field needed like `Char Info`, `Motion List` to bind timelines, and `Sprenderer_charactermotion` to the sprite renderer on your `SpRenderer` object. Said `AbnormalityAppearnce` script can also be swapped for a `CharacterAppearance` script if you want to work with ID appearances; If you do, be sure to also remove the abnormality sprites from the `SpineRenderer` object and add a `CharacterSpineSkin` script in their place.
 - A `PlayableDirector`, leave it as is (and replace the playable later once you actually begin work)
 - An `Animator`, which you will use when you create a new `Animator Controller` component.
 - The `CharacterAppearanceBlood` script, which allows you to edit various properties of blood on the unit.
@@ -82,44 +82,144 @@ On the prefab, you should find:
 - The `CharacterAppearanceMangController` script, which has a list of `Mang Controllers`. Every Mang VFX needs to have a new mang controller entry that is registered here. Alongside this, the `skill infos` section also allows for activation of mangs on specific Skill IDs.
 - And last but not least, the `CharacterAppearanceUpdateBuffState` script, which allows you to activate effects based on the stack of a buff. Populate the `Active Effect` list with a reference to a VFX prefab in order to activate it.
 
-**NOTE**
-
-If you are going to make an Identity, remove the Abnormality related scripts, navigate to the scripts folder, and replace with the corresponding Identity/Personality variants.
-
 Within `ScaleAndPositionPivot`, and `PivotForAnim`, you will find:
-- `SpinePivot`, which holds a `SpineRenderer`
-- `SpRenderer`, which holds all the blood renders and is the unit's Sprite Renderer.
-- `DefaultEffectPivot`, which is where VFX should be parented to
-- `CharacterCenterPoint`
-- `CharacterHeightPoint`
+- `SpinePivot`, which holds a `SpineRenderer`.
+- `SpRenderer`, which holds all the blood renders and is the unit's Sprite Renderer, its very important that you make sure that this object has a `Sprite Mask` component in it, if it doesnt have it the game shits itself badly.
+- `DefaultEffectPivot`, which is where all VFX should be parented to.
+- `CharacterCenterPoint`, which is pretty self explanatory.
+- `CharacterHeightPoint`, which defines the the position of the coin and skill UI on your appearance.
 
 Depending on the copy of your template, you may also find other anchor objects. Those are not required, but you may look at them if you wish.
 
 Navigate back to the `assets` folder, then go to `art`, `qui'lon`, `Animators`, `Phase1`.
 
-Within this folder, you will find the `Animation Controller`. Rename it to match your project. It's state is fine as is.
+Within this folder, you will find the `Animation Controller`. Rename it to match your project and make sure its set on your animator inside your appearance object. It's state is fine as is for now.
 
-Next, navigate back to the `qui'lon` folder, then to `Timelines`, and `Phase1`. In here is all the timelines used on the unit.
+# Animationclips
 
-Before doing anything, right click anywhere in the Project window, go to `Create` -> `Animation` -> `AnimationClip`.
+Animationclips are used to make the sprite animations for your appearance.
 
-Next, double click any of the `TimelineAssets`. You will see a screen like this:
+Before doing anything, open up the animation window by pressing `Ctrl + 6`, click on your appearance object in the hierarchy window, then press on the arrow on the top left corner of the window and click `Create New Clip`, this is where all of your sprite animations will be made. *if you are prompted to create a new animator, do NOT do it, the only animator for the character sprites should be on the main appearance object*
 
-![](docs/assets/timelinewindow.png)
+![](docs/assets/animationclipmaking.png)
 
-First things first, locate the SpineRenderer on the asset and remove it if you're planning to use Sprite based animation instead of Spine. (Which is what this guide will be going over.)
+When doing your first animation clip, make sure that when you add the `sprite` property of the sprite renderer that is inside of `SpRenderer` to ensure correct scaling. To actually use your sprites in an animationclip you select them in the assets window, change their type to `Sprite (2d and UI)`, change `Sprite Mode` to Single and now you should be able to simply drag them into the animationclip. *its also recommended to set the pivot point of your sprites to where the ground would be and between the legs for correct positioning on certain in game effects*
 
-Once you've killed that pesky SpineRenderer, replace it with an Animation Track by right clicking and selecting Animation Track. Once you've done this, click the prefab that you created earlier in the hierarchy, then, take its `SpRenderer` and drag it into the empty slot on the Animation Track. When it prompts to create an animator, press yes.
+# Timeline making
 
-Great! We have a basic setup for this. Next, go ahead and drag your newly created Animation Clip onto the Animation Track. Them, double click the Animation Clip to bring up the Animation Preview.
+Timelines are what will contain the actual skill animations, including movement, camera and damage markers.
 
-Once you've done that, click the prefab in the hierarchy again, and drag in any sprite. It should create a new `[SpRenderer]: Sprite` asset in the animation, and from there, you can animate as usual, however, you will have no preview.
+First things first, right click on the assets tab and click to create a new timeline asset.
 
-**NOTE**: When making a new TimelineAsset, it needs to be added to the Bindings section on the appearance prefab's `PlayableDirector`. Every new motion also needs to exist on the prefab's `CharacterAppearance` script within it's `Motions List`. If the motion has a timeline, add it to the `Timeline Assets`. If you are using Spine instead, go to `Motion Objects` and enable the Spine Anim option.
+![](docs/assets/createtimeline.png)
 
-# Hit checkers, visual effects
+Then, drag the timeline asset you are planning on editing into the `playable director` of your appearance, this needs to be done to any timeline you are editing so that you can see the movement previews and properly parent the tracks.
 
-In order to add VFX, you must first parent the VFX to the prefab's DefaultEffectPivot transform. Once that's done, the VFX parent object must have the script Character Attack Effect. On said script, you must link the `This Particle` field to the particlesystem. Once that's done, navigate back to the TimelineAsset, then, right click the `Effect Activate Timeline Track`'s track -> `Add from Character Attack Effect` -> Your VFX. Scale and position as needed.
+Now, youll want to right click on the timeline, you will see something similar to this:
 
-For hit checkers, you must simply right click the `Skill Give Timing Track`, and select from the list of adds. Alternatively, copy paste an existing give damage timing from the preset TimelineAssets.
+![](docs/assets/timelineaddtracks.png)
 
+These are the types of tracks that are used for creating motions (aka your actual skills and etc), in this guide ill mention only the most important ones. Those are:
+
+-`Animation` track. You should set its animator to the one in your appearance object, when you do so you should be able to just drag in your animationclips into this track.
+
+![](docs/assets/setupanimator.png)
+
+-`Character Appearance Timeline` track. You should set this one to your character appearance, by right clicking on this track in the timeline you will see a giant list of options, which may be intimidating, but for now the main ones you need to think about are these:
+
+![](docs/assets/timelinetracks.png)
+
+When you click on any of these you will notice a marker has been added to your timeline, this marker is what tells the game the time that it has to do what the marker says, every marker has its own settings when you click on them, but most are similar to custom motions so i believe you can figure it out :steamhappy:
+
+-`Skill Give Timing` track. You should set this one to your character appearance; This one is pretty similar to the one above, it just has a different set of markers that it uses, to see them scroll down the menu when you right click the track a little, once again you dont need to worry about all of them, the ones below are the ones you should think about mostly, and once again they work pretty similarly to motions just with markers in the timeline itself instead of values inside a json file.
+
+![](docs/assets/skillgivetimingmarkers.png)
+
+-`Effect Activate` track. Same setup as the ones before. This is the track that controls vfx activation, to use a vfx on a timeline you need to first place its object under the `DefaultEffectPivot` transform, then go to its object and add a `CharacterAttackEffect` or `CharacterAttackEffectV2` script on it and set the `This Particle` field to the particlesystem of your vfx, after youve done that go back to the timeline and right click on the track, you should see a option to add from character attack effect, just add it by clicking there and it should work correctly. *vfx position and scale follow the scale that it has when you look at it inside the `defaulteffectpivot`*
+
+-`On Battle Cam Zoom` and `On Battle Cam Rotate` tracks. Same setup. These are the tracks that control the zooms and rotates (duhh), to use these you simply right click on them in the timeline and you should have a option to add either a battle cam zoom clip or a battle cam rotate clip. these work a bit differently from the skill give timing or the appearance track, they create clips instead of markers, by clicking in the clips you should see the camera options, once again the setup for them is similar to motions, the main change is that the duration for the zoom or rotate is set by the actual lenght of the clip in the timeline, so it makes timing the camera movement way easier.
+
+# Making Motions
+
+Now that you have a basic idea of the tracks and their purposes you need to start making your motions.
+
+Since you already have your timeline setup you should start building your motion however you want, the markers have pretty self explanatory names and their function is the same as the things youd use in motions json that have the same name. Just dont forget to add a `Character Appearance Marker_Hit Cheaker` at the end of the motion. *remember that skill motions with multiple coins should have each coin be its own timeline*
+
+After you have built your timeline now its time to add it to the appearance, for this you should first check if the bindings for the track on the Playable Director in appearance are correct. After that you should go to your main appearance object and find `Motion List` inside of the `AbnormalityAppearnce`/`CharacterAppearance`.
+
+![](docs/assets/addtomotionlist.png)
+
+When you click on the plus at the bottom right corner you will see that a element has been added:
+
+![](docs/assets/refelement.png)
+
+The important things here are `motiondetail`, which is where you select the motion like s1/s2/parry etc. And `Timeline Assets`, which is the place that youll add the timelines you just made :steamhappy:; if you have a multi coin skill you can just add all the timelines inside the `Timeline Assets` tab under the element tagget with the motiondetail of your skill. if you want to have variation in your animations, such as different parrying anims, you can just follow the same process.
+*if you are messing with spine animations you should also mark the element for your motions as a spine anim*
+
+In certain cases, for motions like guard, move or damaged you dont need to add a timeline to their element, you can just open your animation controller and add a state on it with the name of your motion, and make it reference your animationclip in its motion slot. Like this:
+
+![](docs/assets/animationcontroller.png)
+
+# Setting up timeline preview in unity
+When using Doppels project you can also set up a preview scene in unity, letting you see your units movement, knockback on hit and a camera preview. *beware camera preview isnt 100% accurate, keep that in mind*
+
+To set this up you should go to the build tab at the top of your screen and click on `preview` > `Setup preview sandbox in scene`, like so:
+
+![](docs/assets/setuppreview.png)
+
+After youve done this you should notice that a "bean" named `Preview Target (dummy)` has appeared on your hierarchy, that is the dummy that represents the target/enemy for things like moving to target and knockbacks on hit. after youve done this your preview is pretty much setup already, but theres a few steps i personally think are pretty much obligatory.
+
+First you should go to your appearance object in your hierarchy and remove any timelines from its playable director, after you make sure that your appearance isnt currently playing any timeline there, set your appearance position to x:0 y:0 z:0.
+
+Then you should go to `Preview Target (dummy)` on the hierarchy and change its position to x:10 y:1 z:0. After this is done you can now put your timeline back into the appearances playable director and everything should be working fine!!!! If it isnt you can also go back to the build menu at the top and select `Bind selected timeline bindings` and things should work. *if when you put the timeline back into your appearance your appearance object changes its position from 0 0 0 to something else, repeat the proccess and set it back :steamhappy:*
+
+# Spine animations
+
+When using assetloader you are also able to use animations made with spine instead of only sprites, PM only uses spine on their idle animations but you are still able to use them on all animations if you wish.
+
+*This section will contain the process i used on my spine animation for idle. the version of spine i use is 3.8.75. This also considers you already have your animation done on spine, as this is not a guide on how to make animations*
+
+Ok if you have considered these things, you can now start. Firstly you should go to your spine project and press `cntrl` + `E` to open the export menu, on said menu you should select the `binary` export option and make sure that the extension for the export is `.skel`, also make sure that under pack settings your atlas extension is `.atlas`, as seen on the following screenshots:
+
+![](docs/assets/export1.png)
+![](docs/assets/export2.png)
+
+After you have exported your files you should have something that looks like this:
+
+![](docs/assets/export3.png)
+
+Now, if you are using a spine version thats not 4.0.0 (*like me*), youll need to change the version of your export files so that the game accepts them. You can do this by using the [Spine Skeleton Data Converter](https://github.com/wang606/SpineSkeletonDataConverter) tool, when converting the version of the files, make sure that you are converting from your **exact** spine version into **exactly** spine 4.0.0, or else it wont work correctly.
+
+Ok, after thats done you need to change your export file extensions into something that unity accepts so you can actually add it to your project. To do that you should rename your `.skel` file extension to `.skel.bytes`, and your `.atlas` extension to `.atlas.txt`.
+
+Now you can actually add your spine export to unity!! To do that simply drag it into your assets tab in your project, if any errors show up, that means you either did one of the steps wrong or your spine export is evil and fucked up. It should look like this in your assets tab: 
+
+![](docs/assets/spineinunity.png)
+
+*ps. dont forget to first click in the `skeletondataasset` thats now in your assets and click `Create animation Reference assets`*
+
+Now to actually use your spine on your appearance, to do this go to the `[SpineRenderer]` object inside of the `[SpinePivot` of your appearance, then, inside the `SkeletonAnimation` component on that object, you simply change the skeletondataasset to yours then click reload. *if you want to follow pm setup, dont forget to also change the sorting layer in the same component to `BattleUnit`*
+
+Then to use spine animations in timelines you simply swap out the `animation track` that was rendering sprites to a `SpineAnimationState` track (*AKA skeleton animation track*) thats binded to your `[SpineRenderer]` object. After this is done you can simply drag your animation reference objects that you created into the track and they will be added to the timeline.
+
+**IMPORTANT!!!!!**: dont forget to make sure that any motions that use spine animations are marked as such in the `motion list` of your appearance. *i am also not very good with troubleshooting any spine issues, and currently im the only one that has used it besides doppel, so if something doesnt work even following these steps then youre kinda fried sorry*
+
+# Building your bundle
+First you should download the .cs scripts placed on the exportfiles folder on this github and drag them into the Editor folder in your project, make sure that only the newly downloaded BuildAssetBundles.cs file remains in the project.
+
+Then when you are ready you should go to the top of the screen and click to build your bundle.
+
+![](docs/assets/buildexample.png)
+
+the bundle file will be at this directory:
+
+![](docs/assets/builddirectory.png)
+
+You may have noticed your file doesnt have the .bundle extension, dont worry, this is normal and you should just keep it that way.
+After you have built your bundle just load it in with assetloader as said in the beggining and use it like you would use any vanilla appearance :steamhappy:
+
+**TIP**: If you are using Immersive Plagiarism, make sure to clear out any bundles that isnt from your appearance from your project. You can do this using by adding this to your unity project: [AssetBundleBrowser](https://github.com/unity-technologies/assetbundles-browser). After adding it you can find it in the `Window` tab on the top of the screen, just dont build your bundle from there oki? :steamhappy:
+
+**WARNING!!!!! VERY IMPORTANT!!!!!**: Make sure that whenever you change something on your appearance object in the scene you go to the main object and click on `overrides` and click `apply` to override the prefab thats gonna be built with your new changes!!!!!
+
+![](docs/assets/override.png)

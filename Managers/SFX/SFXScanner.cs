@@ -47,17 +47,18 @@ public static class BundleSfxScanner
         {
             try
             {
-                var cues = TimelineCueExtractor.ExtractSoundCues(timeline, lookup);
+                var cues = TimelineCueExtractor.ExtractSoundCues(timeline, lookup, out var replaced);
                 if (cues.Count > 0)
                 {
                     SoundCueCache.Register(timeline, cues);
                     totalCues += cues.Count;
                     Plugin.Log.LogInfo($"[Sfx]   -> registered {cues.Count} cue(s) on timeline '{timeline.name}'.");
-                }
 
-                // Strip unconditionally: an AudioTrack or FMOD track left in place
-                // would make the game's own director try to resolve a Studio event.
-                TimelineCueExtractor.StripAudioTracks(timeline);
+                    // Strip only the tracks we replaced with cues. Timelines with no
+                    // matching .bytes assets, and FMOD tracks that point at events in
+                    // custom .bank files, are left exactly as authored.
+                    TimelineCueExtractor.StripAudioTracks(timeline, replaced);
+                }
             }
             catch (Exception ex)
             {

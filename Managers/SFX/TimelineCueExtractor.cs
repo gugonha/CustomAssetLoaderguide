@@ -25,10 +25,9 @@ public delegate byte[] AudioByteLookup(string clipName);
 ///   1. Extraction iterates timeline.flattenedTracks -> track.clips, lowercases
 ///      clip.displayName, and asks the lookup for bytes. A null result skips the clip.
 ///
-///   2. Stripping removes Unity AudioTracks and any track carrying a clip whose asset
-///      type name contains "FMOD". FMOD tracks must go, otherwise the game's own
-///      RuntimeManager tries to resolve a Studio event that was authored against the
-///      mod's own master bank — the exact failure the port exists to avoid.
+///   2. Stripping removes only Unity AudioTracks that were converted to cues. FMOD
+///      tracks are never touched: they play events from custom .bank files through
+///      the game's own RuntimeManager, which is the supported bank workflow.
 ///
 /// Both operations mutate the timeline. Clone before calling if the original is
 /// shared or addressable-cached; see <see cref="CloneExtractStripRegister"/> for the
@@ -41,12 +40,27 @@ public static class TimelineCueExtractor
     /// per clip whose displayName resolves to audio bytes. Does not mutate the timeline.
     /// </summary>
     public static List<SoundCue> ExtractSoundCues(TimelineAsset timeline, AudioByteLookup lookup)
+        => ExtractSoundCues(timeline, lookup, out _);
+
+    /// <summary>
+    /// Same as above, but also reports the instance IDs of the tracks that actually
+    /// produced at least one cue. StripAudioTracks uses this so that only tracks we
+    /// replaced get removed; untouched FMOD tracks (custom bank events) survive.
+    /// </summary>
+    public static List<SoundCue> ExtractSoundCues(
+        TimelineAsset timeline, AudioByteLookup lookup, out HashSet<int> tracksWithCues)
     {
         var cues = new List<SoundCue>();
+        tracksWithCues = new HashSet<int>();
         if (timeline == null || lookup == null) return cues;
 
         foreach (var track in timeline.flattenedTracks)
         {
+            // Only Unity AudioTracks are ever converted. FMOD event tracks (e.g.
+            // FMODCustomTrack) trigger events from custom .bank files and must be
+            // left to the game, even if a clip name happens to match an audio file.
+            if (!IsUnityAudioTrack(track)) continue;
+
             foreach (var clip in track.clips)
             {
                 string clipName = clip.displayName?.ToLower();
@@ -59,6 +73,7 @@ public static class TimelineCueExtractor
                     $"[Sfx] cue: {clipName} | {bytes.Length} bytes | " +
                     $"start={clip.start:F3}s clipIn={clip.clipIn:F3}s duration={clip.duration:F3}s");
 
+                tracksWithCues.Add(track.GetInstanceID());
                 cues.Add(new SoundCue
                 {
                     StartTime = (float)clip.start,
@@ -74,43 +89,38 @@ public static class TimelineCueExtractor
     }
 
     /// <summary>
-    /// Removes Unity AudioTracks and any track whose clips carry FMOD assets. Mutates
-    /// the timeline. Safe to call multiple times; already-removed tracks are gone.
+    /// True for Unity's built-in AudioTrack. FMOD tracks (any type whose name contains
+    /// "FMOD", or whose clips carry FMOD assets) are explicitly NOT audio tracks here.
     /// </summary>
-    public static void StripAudioTracks(TimelineAsset timeline)
+    private static bool IsUnityAudioTrack(TrackAsset track)
     {
-        if (timeline == null) return;
+        var typeName = track.GetIl2CppType().Name;
+        if (typeName.Contains("FMOD")) return false;
+        return typeName.Contains("AudioTrack");
+    }
+
+    /// <summary>
+    /// Removes the Unity AudioTracks listed in <paramref name="onlyTracks"/> (those whose
+    /// clips were converted to cues). FMOD tracks are never removed. Mutates the
+    /// timeline. Safe to call multiple times.
+    /// </summary>
+    public static void StripAudioTracks(TimelineAsset timeline, HashSet<int> onlyTracks)
+    {
+        if (timeline == null || onlyTracks == null || onlyTracks.Count == 0) return;
 
         var tracksToRemove = new List<TrackAsset>();
 
         foreach (var track in timeline.flattenedTracks)
         {
-            var typeName = track.GetIl2CppType().Name;
-
-            bool isUnityAudio = typeName.Contains("AudioTrack");
-            bool hasFMODClips = false;
-
-            foreach (var clip in track.clips)
-            {
-                var asset = clip.asset;
-                if (asset == null) continue;
-
-                var assetType = asset.GetIl2CppType().Name;
-                if (assetType.Contains("FMOD"))
-                {
-                    hasFMODClips = true;
-                    break;
-                }
-            }
-
-            if (isUnityAudio || hasFMODClips)
-                tracksToRemove.Add(track);
+            if (!onlyTracks.Contains(track.GetInstanceID())) continue;
+            if (!IsUnityAudioTrack(track)) continue; // belt and braces
+            tracksToRemove.Add(track);
         }
 
         foreach (var track in tracksToRemove)
         {
             timeline.DeleteTrack(track);
-            Plugin.Log.LogInfo($"[Sfx] stripped track: {track.name}");
+            Plugin.Log.LogInfo($"[Sfx] stripped audio track: {track.name}");
         }
     }
 
@@ -134,8 +144,8 @@ public static class TimelineCueExtractor
 
         var clone = UnityEngine.Object.Instantiate(source);
 
-        cues = ExtractSoundCues(clone, lookup);
-        StripAudioTracks(clone);
+        cues = ExtractSoundCues(clone, lookup, out var replaced);
+        StripAudioTracks(clone, replaced);
 
         if (cues.Count > 0)
             SoundCueCache.Register(clone, cues);

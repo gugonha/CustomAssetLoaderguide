@@ -982,7 +982,8 @@ public static class BundleManager
             BundleLog.Error($"AssetBundle.LoadFromFile failed: {cacheKey}");
             return false;
         }
-        CustomAssetLoader.Managers.SFX.BundleSfxScanner.ScanBundle(bundle, cacheKey);
+        try { CustomAssetLoader.Managers.SFX.BundleSfxScanner.ScanBundle(bundle, cacheKey); }
+        catch (System.Exception ex) { BundleLog.Error($"SFX scan failed for {cacheKey}: {ex.Message}"); }
         LoadedBundles[cacheKey] = bundle;
         return true;
     }

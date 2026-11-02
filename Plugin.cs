@@ -26,7 +26,8 @@ public sealed class Plugin : BasePlugin
         BankPatches.Apply(harmony);
 
         // SFX pipeline — FMOD Core playback, no banks.
-        MotionsSFXPatches.Apply(harmony);
+        try { MotionsSFXPatches.Apply(harmony); }
+        catch (System.Exception ex) { Log.LogError($"[Sfx] init failed, audio tracks disabled: {ex}"); }
 
         BundleLog.Loaded($"{PLUGIN_NAME} v{VERSION} loaded.");
     }
