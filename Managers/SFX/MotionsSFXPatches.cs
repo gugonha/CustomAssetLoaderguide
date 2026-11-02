@@ -23,6 +23,7 @@ namespace CustomAssetLoader.Patches.Features;
 public static class MotionsSFXPatches
 {
     private static bool _applied;
+    private static bool sfxlog = false;
 
     public static void Apply(Harmony harmony)
     {
@@ -40,12 +41,10 @@ public static class MotionsSFXPatches
         Plugin.Log.LogInfo("[Sfx] MotionSfxPatches applied.");
     }
 
-    // ---- CharacterAppearance.ChangeMotion -------------------------------------
-
     private static void PatchChangeMotion(Harmony harmony)
     {
         var method = AccessTools.Method(typeof(SD.CharacterAppearance), "ChangeMotion");
-        if (method == null)
+        if (method == null && sfxlog == true)
         {
             Plugin.Log.LogWarning("[Sfx] SD.CharacterAppearance.ChangeMotion not found.");
             return;
@@ -53,8 +52,10 @@ public static class MotionsSFXPatches
 
         harmony.Patch(method, postfix: new HarmonyMethod(
             typeof(MotionsSFXPatches), nameof(Postfix_ChangeMotion)));
-
-        Plugin.Log.LogInfo("[Sfx] patched SD.CharacterAppearance.ChangeMotion.");
+        if (sfxlog == true)
+        {
+            Plugin.Log.LogInfo("[Sfx] patched SD.CharacterAppearance.ChangeMotion.");
+        }
     }
 
     /// <summary>
@@ -67,31 +68,38 @@ public static class MotionsSFXPatches
         int index)
     {
         if (__instance == null) return;
-        // in Postfix_ChangeMotion, at the top
-        Plugin.Log.LogInfo($"[Sfx] ChangeMotion postfix: {motiondetail} idx={index}");
+        if (sfxlog == true)
+        {
+            Plugin.Log.LogInfo($"[Sfx] ChangeMotion postfix: {motiondetail} idx={index}");
+        }
         try
         {
             var director = __instance._playableDirector;
             if (director == null)
             {
-                Plugin.Log.LogInfo("[Sfx] ChangeMotion: _playableDirector is null.");
+                if (sfxlog == true)
+                {
+                    Plugin.Log.LogInfo("[Sfx] ChangeMotion: _playableDirector is null.");
+                }
                 return;
             }
-
-            // The game may not have assigned playableAsset yet at postfix time. Log
-            // the current value and, if it's null, wait one frame by deferring to a
-            // ticker that re-checks in its Update.
             var asset = director.playableAsset;
             var name = asset != null ? asset.name : "null";
 
-            Plugin.Log.LogInfo(
-                $"[Sfx] ChangeMotion fired: detail={motiondetail} index={index} asset={name}");
+            if (sfxlog == true)
+            {
+                Plugin.Log.LogInfo(
+                    $"[Sfx] ChangeMotion fired: detail={motiondetail} index={index} asset={name}");
+            }
 
             if (asset == null) return;
 
             if (!SoundCueCache.TryGet(asset, out var cues) || cues.Count == 0)
             {
-                Plugin.Log.LogInfo($"[Sfx]   no registered cues for '{name}'.");
+                if (sfxlog == true)
+                {
+                    Plugin.Log.LogInfo($"[Sfx]   no registered cues for '{name}'.");
+                }
                 return;
             }
 
@@ -99,11 +107,12 @@ public static class MotionsSFXPatches
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_ChangeMotion: {ex}");
+            if (sfxlog == true)
+            {
+                Plugin.Log.LogError($"[Sfx] Postfix_ChangeMotion: {ex}");
+            }
         }
     }
-
-    // ---- PlayableDirector.Play (fallback for other directors) -----------------
 
     private static void PatchPlay(Harmony harmony, string methodName, Type[] args)
     {
@@ -117,25 +126,32 @@ public static class MotionsSFXPatches
     public static void Postfix_Play(PlayableDirector __instance)
     {
         if (__instance == null) return;
-        // in Postfix_Play, at the top
-        Plugin.Log.LogInfo($"[Sfx] Play postfix: {__instance.playableAsset?.name ?? "null"}");
+        if (sfxlog == true)
+        {
+            Plugin.Log.LogInfo($"[Sfx] Play postfix: {__instance.playableAsset?.name ?? "null"}");
+        }
         try
         {
             var asset = __instance.playableAsset;
             if (asset == null) return;
 
             if (!SoundCueCache.TryGet(asset, out var cues) || cues.Count == 0) return;
-
-            Plugin.Log.LogInfo($"[Sfx] Play fired on '{asset.name}' ({cues.Count} cue(s)).");
+            if (sfxlog == true)
+            {
+                Plugin.Log.LogInfo($"[Sfx] Play fired on '{asset.name}' ({cues.Count} cue(s)).");
+            }
             AttachTicker(__instance, cues);
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_Play: {ex}");
+            if (sfxlog == true)
+            {
+                Plugin.Log.LogError($"[Sfx] Postfix_Play: {ex}");
+            }
         }
     }
 
-    // ---- PlayableDirector.Stop ------------------------------------------------
+
 
     private static void PatchStop(Harmony harmony)
     {
@@ -156,18 +172,18 @@ public static class MotionsSFXPatches
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_Stop: {ex}");
+            if (sfxlog == true)
+            {
+                Plugin.Log.LogError($"[Sfx] Postfix_Stop: {ex}");
+            }
         }
     }
-
-    // ---- Shared -------------------------------------------------------------
 
     private static void AttachTicker(
         PlayableDirector director,
         System.Collections.Generic.List<SoundCue> sourceCues)
     {
-        // Fresh copy: two attaches in one frame (ChangeMotion + Play both firing)
-        // would otherwise share Triggered flags and double-fire.
+
         var cues = new System.Collections.Generic.List<SoundCue>(sourceCues);
 
         var ticker = director.gameObject.GetComponent<SoundCueTicker>();
@@ -180,8 +196,10 @@ public static class MotionsSFXPatches
         ticker.Director = director;
         ticker.SoundCues = cues;
         ticker.ResetTriggers();
-
-        Plugin.Log.LogInfo(
+        if (sfxlog == true)
+        {
+            Plugin.Log.LogInfo(
             $"[Sfx] ticker attached to '{director.gameObject.name}' ({cues.Count} cue(s)).");
+        }
     }
 }

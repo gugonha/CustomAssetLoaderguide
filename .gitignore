@@ -9,3 +9,4 @@ Directory.Build.props
 dump_latest.txt
 _tmp*
 README.md
+.vs/
