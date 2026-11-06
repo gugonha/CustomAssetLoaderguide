@@ -24,11 +24,13 @@ public sealed class Plugin : BasePlugin
         BattleEffectListPatches.Apply(harmony);
         CustomBundleMotionPatches.Apply(harmony);
         BankPatches.Apply(harmony);
+        SpriteIdlePatches.Apply(harmony);
 
         // SFX pipeline — FMOD Core playback, no banks.
         try { MotionsSFXPatches.Apply(harmony); }
         catch (System.Exception ex) { Log.LogError($"[Sfx] init failed, audio tracks disabled: {ex}"); }
 
         BundleLog.Loaded($"{PLUGIN_NAME} v{VERSION} loaded.");
+
     }
 }

@@ -43,6 +43,12 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ExportFiles\**" />
+    <EmbeddedResource Remove="ExportFiles\**" />
+    <None Remove="ExportFiles\**" />
+  </ItemGroup>
+
   <Target Name="CopyFile" AfterTargets="build">
     <Message Text="Copying BIE files..." Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(LimbusCompanyFolder)\BepInEx\plugins\$(AssemblyName).dll" />

@@ -54,7 +54,7 @@ public static class MotionsSFXPatches
         harmony.Patch(method, postfix: new HarmonyMethod(
             typeof(MotionsSFXPatches), nameof(Postfix_ChangeMotion)));
 
-        Plugin.Log.LogInfo("[Sfx] patched SD.CharacterAppearance.ChangeMotion.");
+        BundleLog.Verbose("[Sfx] patched SD.CharacterAppearance.ChangeMotion.");
     }
 
     /// <summary>
@@ -68,13 +68,13 @@ public static class MotionsSFXPatches
     {
         if (__instance == null) return;
         // in Postfix_ChangeMotion, at the top
-        Plugin.Log.LogInfo($"[Sfx] ChangeMotion postfix: {motiondetail} idx={index}");
+        BundleLog.Verbose($"[Sfx] ChangeMotion postfix: {motiondetail} idx={index}");
         try
         {
             var director = __instance._playableDirector;
             if (director == null)
             {
-                Plugin.Log.LogInfo("[Sfx] ChangeMotion: _playableDirector is null.");
+                BundleLog.Verbose("[Sfx] ChangeMotion: _playableDirector is null.");
                 return;
             }
 
@@ -84,14 +84,14 @@ public static class MotionsSFXPatches
             var asset = director.playableAsset;
             var name = asset != null ? asset.name : "null";
 
-            Plugin.Log.LogInfo(
+            BundleLog.Verbose(
                 $"[Sfx] ChangeMotion fired: detail={motiondetail} index={index} asset={name}");
 
             if (asset == null) return;
 
             if (!SoundCueCache.TryGet(asset, out var cues) || cues.Count == 0)
             {
-                Plugin.Log.LogInfo($"[Sfx]   no registered cues for '{name}'.");
+                BundleLog.Verbose($"[Sfx]   no registered cues for '{name}'.");
                 return;
             }
 
@@ -99,7 +99,7 @@ public static class MotionsSFXPatches
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_ChangeMotion: {ex}");
+            BundleLog.Error($"[Sfx] Postfix_ChangeMotion: {ex}");
         }
     }
 
@@ -118,7 +118,7 @@ public static class MotionsSFXPatches
     {
         if (__instance == null) return;
         // in Postfix_Play, at the top
-        Plugin.Log.LogInfo($"[Sfx] Play postfix: {__instance.playableAsset?.name ?? "null"}");
+        BundleLog.Verbose($"[Sfx] Play postfix: {__instance.playableAsset?.name ?? "null"}");
         try
         {
             var asset = __instance.playableAsset;
@@ -126,12 +126,12 @@ public static class MotionsSFXPatches
 
             if (!SoundCueCache.TryGet(asset, out var cues) || cues.Count == 0) return;
 
-            Plugin.Log.LogInfo($"[Sfx] Play fired on '{asset.name}' ({cues.Count} cue(s)).");
+            BundleLog.Verbose($"[Sfx] Play fired on '{asset.name}' ({cues.Count} cue(s)).");
             AttachTicker(__instance, cues);
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_Play: {ex}");
+            BundleLog.Error($"[Sfx] Postfix_Play: {ex}");
         }
     }
 
@@ -156,7 +156,7 @@ public static class MotionsSFXPatches
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogError($"[Sfx] Postfix_Stop: {ex}");
+            BundleLog.Error($"[Sfx] Postfix_Stop: {ex}");
         }
     }
 
@@ -181,7 +181,7 @@ public static class MotionsSFXPatches
         ticker.SoundCues = cues;
         ticker.ResetTriggers();
 
-        Plugin.Log.LogInfo(
+        BundleLog.Verbose(
             $"[Sfx] ticker attached to '{director.gameObject.name}' ({cues.Count} cue(s)).");
     }
 }
